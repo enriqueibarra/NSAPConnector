@@ -49,7 +49,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DestinationConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SapCommand.cs" />
+    <Compile Include="SapConfigParameters.cs" />
+    <Compile Include="SapConnection.cs" />
+    <Compile Include="SapSession.cs" />
+    <Compile Include="SapTransaction.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

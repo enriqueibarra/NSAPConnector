@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("NSAPConnector.UnitTests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Honeywell")]
-[assembly: AssemblyProduct("NSAPConnector.UnitTests")]
-[assembly: AssemblyCopyright("Copyright © Honeywell 2013")]
+[assembly: AssemblyCompany("Ion Sapoval")]
+[assembly: AssemblyProduct("NSAPConnector")]
+[assembly: AssemblyCopyright("Copyright © Ion Sapoval 2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
