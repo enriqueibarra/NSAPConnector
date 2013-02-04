@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CustomExceptions\NSAPConnectorException.cs" />
     <Compile Include="DestinationConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SapCommand.cs" />
@@ -56,7 +57,9 @@
     <Compile Include="SapConnection.cs" />
     <Compile Include="SapSession.cs" />
     <Compile Include="SapTransaction.cs" />
+    <Compile Include="Utils\ConfigParser.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
