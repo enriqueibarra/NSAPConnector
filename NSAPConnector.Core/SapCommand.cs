@@ -25,13 +25,13 @@ namespace NSAPConnector
         public string CommandText { get; set; }
         public SapConnection Connection { get; set; }
         public SapTransaction Transaction { get; set; }
-        public List<SapParameter> Parameters { get; set; }
+        public SapParameterCollection Parameters { get; set; }
  
         #region Ctor
         
         public SapCommand()
         {
-            Parameters = new List<SapParameter>();
+            Parameters = new SapParameterCollection();
         }
 
         public SapCommand(string cmdText) : this()
@@ -143,6 +143,17 @@ namespace NSAPConnector
             }
 
             return functionRef;
+        }
+
+        public SapDataReader ExecuteReader(string tableName = null)
+        {
+            var rfcFunctionRef = ExecuteRfc();
+
+            var resultTable = string.IsNullOrEmpty(tableName)
+                                  ? rfcFunctionRef.GetTable(0)
+                                  : rfcFunctionRef.GetTable(tableName);
+
+            return new SapDataReader(resultTable);
         }
 
         private void PopulateDataTable(IRfcTable rfcTable, DataTable dataTable)
