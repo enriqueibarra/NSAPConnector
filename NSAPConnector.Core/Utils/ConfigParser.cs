@@ -7,17 +7,34 @@ using NSAPConnector.CustomExceptions;
 
 namespace NSAPConnector.Utils
 {
+    /// <summary>
+    /// This class is used for extracting
+    /// SAP destination configuration from the
+    /// application configuration file.
+    /// This class is was designed only for the internal use.
+    /// </summary>
     internal class ConfigParser
     {
+        /// <summary>
+        /// Name of the current application configuration file.
+        /// </summary>
         private static readonly string _configFile;
 
 
         static ConfigParser()
         {
+            //get current app/web config file
             _configFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
         }
 
-        internal static Dictionary<string, string> GetDestinationParameters(string destinationName)
+        /// <summary>
+        /// Parses current application config file
+        /// and searches for the sap configuration sections.
+        /// </summary>
+        /// <param name="destinationName">If this parameter is provided then a destination configuration with the same name will be searched,
+        /// otherwise first destionation configuration section will be returned.</param>
+        /// <returns>All the parameters specified for the found destination.</returns>
+        internal static Dictionary<string, string> GetDestinationParameters(string destinationName = null)
         {
             var destParams = new Dictionary<string, string>();
             IEnumerable<XElement> resultElements;

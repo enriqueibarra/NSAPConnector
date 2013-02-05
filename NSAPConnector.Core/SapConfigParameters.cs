@@ -2,6 +2,10 @@
 
 namespace NSAPConnector
 {
+    /// <summary>
+    /// This class contains all possible configuration parameters names
+    /// for a SAP configuration.
+    /// </summary>
     public static class SapConfigParameters
     {
         public const string AppServerHost = "ASHOST";

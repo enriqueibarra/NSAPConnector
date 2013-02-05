@@ -4,6 +4,10 @@ using SAP.Middleware.Connector;
 
 namespace NSAPConnector
 {
+    /// <summary>
+    /// This class provides basic means for
+    /// being able to make transactional rfc calls to SAP 
+    /// </summary>
     public class SapTransaction : RfcTransaction
     {
         private readonly SapConnection _connection;
@@ -13,6 +17,10 @@ namespace NSAPConnector
             _connection = connection;
         }
 
+        /// <summary>
+        /// Commits current transaction and unbinds it from
+        /// the corresponding connection.
+        /// </summary>
         public void Commit()
         {
             try
@@ -30,6 +38,10 @@ namespace NSAPConnector
             }
         }
 
+        /// <summary>
+        /// Rollback current transaction and unbinds it from
+        /// the corresponding connection.
+        /// </summary>
         public void Rollback()
         {
             try

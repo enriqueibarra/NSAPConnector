@@ -7,22 +7,44 @@ using NSAPConnector.Utils;
 
 namespace NSAPConnector
 {
+    /// <summary>
+    /// This class is used for establishing
+    /// a connection to the SAP based on the 
+    /// provided configuration parameters
+    /// </summary>
     public class SapConnection : IDisposable
     {
         private readonly IDestinationConfiguration _destinationConfiguration;
         private readonly string _destinationConfigName;
 
+        /// <summary>
+        /// This property is used only inside NSAPConnector library
+        /// for being able to work transactionally
+        /// </summary>
         internal SapTransaction CurrentTransaction { get; set; }
 
+        /// <summary>
+        /// This property is populated on connection opening
+        /// with the RfcDestination which corresponds to the 
+        /// provided configuration parameters
+        /// </summary>
         public RfcDestination Destination { get; set; }
 
         #region Ctor
         
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="destinationConfigName">Name of the destination from the application configuration file.</param>
         public SapConnection(string destinationConfigName)
             : this(ConfigParser.GetDestinationParameters(destinationConfigName))
         {
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sapConfigParameters">A dictionary with parameters (key = paramater name, value = parameter value)</param>
         public SapConnection(Dictionary<string, string> sapConfigParameters)
         {
             _destinationConfigName = sapConfigParameters.ContainsKey("NAME")
@@ -43,6 +65,10 @@ namespace NSAPConnector
 
         #endregion
 
+        /// <summary>
+        /// Open connection.
+        /// A new RfcDestination is created.
+        /// </summary>
         public void Open()
         {
             try
@@ -55,6 +81,11 @@ namespace NSAPConnector
             }
         }
 
+        /// <summary>
+        /// Open a new transaction which is bind
+        /// to the current connection
+        /// </summary>
+        /// <returns></returns>
         public SapTransaction BeginTransaction()
         {
             CurrentTransaction = new SapTransaction(this);
@@ -62,6 +93,10 @@ namespace NSAPConnector
             return CurrentTransaction;
         }
 
+        /// <summary>
+        /// Commit/Rollback existing transaction.
+        /// Unregister current destination configuration.
+        /// </summary>
         public void Dispose()
         {
             if (_destinationConfiguration != null)

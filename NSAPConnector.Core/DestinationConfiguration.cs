@@ -3,6 +3,10 @@ using SAP.Middleware.Connector;
 
 namespace NSAPConnector
 {
+    /// <summary>
+    /// Implementation of the IDestinationConfiguration
+    /// used to add configuration data to the SAP adapter
+    /// </summary>
     internal class DestinationConfiguration : IDestinationConfiguration
     {
         private readonly RfcConfigParameters _configParameters;
