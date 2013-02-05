@@ -55,6 +55,7 @@
     <Compile Include="SapCommand.cs" />
     <Compile Include="SapConfigParameters.cs" />
     <Compile Include="SapConnection.cs" />
+    <Compile Include="SapParameter.cs" />
     <Compile Include="SapSession.cs" />
     <Compile Include="SapTransaction.cs" />
     <Compile Include="Utils\ConfigParser.cs" />
