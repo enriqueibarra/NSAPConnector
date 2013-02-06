@@ -1,5 +1,9 @@
 ﻿namespace NSAPConnector
 {
+    /// <summary>
+    /// This class is used for 
+    /// storing RFC parameter information.
+    /// </summary>
     public class SapParameter
     {
         public string Name { get; set; }

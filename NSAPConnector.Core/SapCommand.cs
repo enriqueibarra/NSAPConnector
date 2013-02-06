@@ -7,6 +7,10 @@ using System.Text.RegularExpressions;
 
 namespace NSAPConnector
 {
+    /// <summary>
+    /// This class provides all means for
+    /// configuring and executing a RFC call
+    /// </summary>
     public class SapCommand
     {
         private RfcRepository Repository
@@ -22,12 +26,30 @@ namespace NSAPConnector
             }
         }
 
+        /// <summary>
+        /// SAP command to execute.
+        /// Name of the function.
+        /// </summary>
         public string CommandText { get; set; }
+
+        /// <summary>
+        /// SapConnection to be used for
+        /// executing SAP command
+        /// </summary>
         public SapConnection Connection { get; set; }
+
+        /// <summary>
+        /// If RFC should be transactional this property should be set
+        /// to an instance of the SapTransaction
+        /// </summary>
         public SapTransaction Transaction { get; set; }
+
+        /// <summary>
+        /// RFC parameters
+        /// </summary>
         public SapParameterCollection Parameters { get; set; }
  
-        #region Ctor
+        #region Ctors
         
         public SapCommand()
         {
@@ -68,6 +90,13 @@ namespace NSAPConnector
 
         #endregion
 
+        /// <summary>
+        /// Executes configured sap command with the 
+        /// given parameters and all results of type table will
+        /// be put in a DataSet.
+        /// </summary>
+        /// <returns>DataSet which will contain a DataTable for each table result returned by RFC call. 
+        /// DataTables will contain columns with the same name like rfcTable's columns and with the corresponding .net type.</returns>
         public DataSet ExecuteDataSet()
         {
             var resultDataSet = new DataSet();
@@ -87,6 +116,12 @@ namespace NSAPConnector
             return resultDataSet;
         }
 
+        /// <summary>
+        /// Executes configured sap command with the 
+        /// given parameters and all results of type table will
+        /// be stored in a dictionary.
+        /// </summary>
+        /// <returns>Dictionary with RfcTables (key = table name, value = RfcTable instance)</returns>
         public Dictionary<string, IRfcTable> ExecuteRfcTables()
         {
             var resultDictionary = new Dictionary<string, IRfcTable>();
@@ -104,8 +139,25 @@ namespace NSAPConnector
             return resultDictionary;
         }
 
+        /// <summary>
+        /// Executes configured sap command with the
+        /// given parameters and the RfcFunction reference 
+        /// is returned.
+        /// </summary>
+        /// <returns>RfcFunction reference after invokation</returns>
         public IRfcFunction ExecuteRfc()
         {
+
+            if (string.IsNullOrEmpty(CommandText))
+            {
+                throw new ArgumentException("Command text cannot be null or empty.");
+            }
+
+            if (Connection == null)
+            {
+                throw new ArgumentNullException("Connection");
+            }
+
             IRfcFunction functionRef;
 
             try
@@ -145,6 +197,15 @@ namespace NSAPConnector
             return functionRef;
         }
 
+        /// <summary>
+        /// Executes configured sap command with the 
+        /// given parameters and returns a SapDataReader
+        /// based on the table result. 
+        /// </summary>
+        /// <param name="tableName">If this parameter is provided then SapDataReader 
+        /// is based on the table result with the name equal with tableName, ohterwise
+        /// the first table result will be used.</param>
+        /// <returns>SapDataReader instance</returns>
         public SapDataReader ExecuteReader(string tableName = null)
         {
             var rfcFunctionRef = ExecuteRfc();
@@ -156,6 +217,12 @@ namespace NSAPConnector
             return new SapDataReader(resultTable);
         }
 
+        /// <summary>
+        /// Populates a DataTable with the values
+        /// from the given RfcTable
+        /// </summary>
+        /// <param name="rfcTable">Source table</param>
+        /// <param name="dataTable">Destination table</param>
         private void PopulateDataTable(IRfcTable rfcTable, DataTable dataTable)
         {
             for (var i = 0; i < rfcTable.RowCount; i++)
@@ -181,6 +248,13 @@ namespace NSAPConnector
             }
         }
 
+        /// <summary>
+        /// Creates a DataTable which has the same structure whith
+        /// the given RfcTable.
+        /// </summary>
+        /// <param name="tableToConvert">RfcTable to clone.</param>
+        /// <param name="tableName">Name of the DataTable to be created.</param>
+        /// <returns>DataTable instance.</returns>
         private DataTable ConvertRfcTableToDataTable(IRfcTable tableToConvert, string tableName)
         {
             var columnsMetadata = tableToConvert.Metadata.LineType;
@@ -195,6 +269,12 @@ namespace NSAPConnector
             return dataTable;
         }
 
+        /// <summary>
+        /// Maps SAP types to .Net types.
+        /// </summary>
+        /// <param name="sapType">SAP type to map</param>
+        /// <param name="typeLength">Length of the SAP type (ex: CHAR(16) => typeLength = 16)</param>
+        /// <returns>.Net type</returns>
         private Type GetCorrespondingDotNetType(string sapType, int typeLength)
         {
             switch(sapType)
@@ -233,6 +313,13 @@ namespace NSAPConnector
             }
         }
 
+        /// <summary>
+        /// Extract value from RfcColumn by using the correct method for the 
+        /// column type and put extracted value into the DataColumn.
+        /// </summary>
+        /// <param name="rfcColumn">Value source.</param>
+        /// <param name="dataRow">Value destination.</param>
+        /// <param name="dataColumn">Column to be set from destination.</param>
         private void SetDataColumnValueFromRfcColumn(IRfcField rfcColumn, DataRow dataRow, DataColumn dataColumn)
         {
 
@@ -274,6 +361,11 @@ namespace NSAPConnector
             dataRow[dataColumn.ColumnName] = rfcColumn.GetString();
         }
 
+        /// <summary>
+        /// Extract all table names from the rfc results metadata.
+        /// </summary>
+        /// <param name="metadataDescription">Result metadata description.</param>
+        /// <returns>List of the found result tables.</returns>
         private IEnumerable<string> GetResultTableNames(string metadataDescription)
         {
             var regex = new Regex(@"TABLES (\w+):");

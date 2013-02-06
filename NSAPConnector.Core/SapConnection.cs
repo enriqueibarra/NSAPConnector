@@ -30,7 +30,7 @@ namespace NSAPConnector
         /// </summary>
         public RfcDestination Destination { get; set; }
 
-        #region Ctor
+        #region Ctors
         
         /// <summary>
         /// 
@@ -125,6 +125,8 @@ namespace NSAPConnector
                     Trace.TraceError("An error occurred when trying to unregister destination configuration. Exception: {0}", ex);
                 }
             }
+
+            GC.SuppressFinalize(this);
         }
     }
 }
