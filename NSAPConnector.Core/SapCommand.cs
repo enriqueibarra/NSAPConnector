@@ -150,12 +150,12 @@ namespace NSAPConnector
 
             if (string.IsNullOrEmpty(CommandText))
             {
-                throw new ArgumentException("Command text cannot be null or empty.");
+                throw new NSAPConnectorException("Command text cannot be null or empty.");
             }
 
             if (Connection == null)
             {
-                throw new ArgumentNullException("Connection");
+                throw new NSAPConnectorException("Connection is not set.");
             }
 
             IRfcFunction functionRef;
