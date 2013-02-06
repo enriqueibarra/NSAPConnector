@@ -15,6 +15,20 @@ For the destination configuration part you can still use the config file which h
 SAP .Net Connector 3.0 or you can provide configuration parameters directly to the SapConnection constructor(use
 SapConfigParameters class for parameters name).
 
+## NuGet
+You can add this library to your project by using NuGet, you just have to type in your Package Manager Console:
+
+```
+Install-Package NSAPConnector_x86
+
+```
+or for the 64 bit version
+
+```
+Install-Package NSAPConnector_x64
+
+```
+
 ## Usage examples (C#)
 
 * Get a DataSet populated with all the returned result tables
