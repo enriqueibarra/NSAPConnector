@@ -4,6 +4,7 @@ using System.Data;
 using NSAPConnector.CustomExceptions;
 using SAP.Middleware.Connector;
 using System.Text.RegularExpressions;
+using System.Linq;
 
 namespace NSAPConnector
 {
@@ -210,8 +211,14 @@ namespace NSAPConnector
         {
             var rfcFunctionRef = ExecuteRfc();
 
+            //if no result table name was provided then try to find first result table name returned by the current BAPI
+            if(string.IsNullOrEmpty(tableName))
+            {
+                tableName = GetResultTableNames(rfcFunctionRef.Metadata.ToString()).FirstOrDefault();
+            }
+            
             var resultTable = string.IsNullOrEmpty(tableName)
-                                  ? rfcFunctionRef.GetTable(0)
+                                  ? null
                                   : rfcFunctionRef.GetTable(tableName);
 
             return new SapDataReader(resultTable);
